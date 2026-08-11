@@ -1,0 +1,606 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Atelier Vale — Interior Design Studio creating calm, considered spaces." />
+    <title>Atelier Vale — Interior Design Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { 
+            --paper: #f7f6f2; 
+            --warm-white: #fdfcf9; 
+            --ink: #242421; 
+            --muted: #77766f; 
+            --line: #deddd7; 
+            --sand: #ddd4c5; 
+            --clay: #987e68; 
+            --dark: #30312d; 
+            --serif: "Cormorant Garamond", "Times New Roman", serif; 
+            --sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+        } 
+        
+        * { box-sizing: border-box; } 
+        html { scroll-behavior: smooth; } 
+        
+        body { 
+            margin: 0; 
+            color: var(--ink); 
+            background: var(--paper); 
+            font-family: var(--sans); 
+            font-size: 15px; 
+            line-height: 1.55; 
+            overflow-x: hidden; 
+        } 
+        
+        body.menu-open, body.modal-open { overflow: hidden; } 
+        
+        a { color: inherit; text-decoration: none; } 
+        button, input, textarea, select { font: inherit; } 
+        button { cursor: pointer; } 
+        img { display: block; width: 100%; object-fit: cover; } 
+        
+        .container { 
+            width: min(1240px, calc(100% - 64px)); 
+            margin: 0 auto; 
+        } 
+        
+        .eyebrow { 
+            display: flex; 
+            gap: 11px; 
+            align-items: center; 
+            color: var(--muted); 
+            font-size: 10px; 
+            letter-spacing: .16em; 
+            text-transform: uppercase; 
+            font-weight: 600; 
+        } 
+        
+        .eyebrow::before { 
+            content: ""; 
+            width: 25px; 
+            height: 1px; 
+            background: currentColor; 
+        } 
+        
+        h1, h2, h3, p { margin-top: 0; } 
+        h1, h2, h3 { font-weight: 400; letter-spacing: -.035em; } 
+        h1, h2 { font-family: var(--serif); } 
+        h2 { font-size: clamp(38px, 5vw, 67px); line-height: 1.04; } 
+        
+        .text-link { 
+            border-bottom: 1px solid var(--ink); 
+            padding-bottom: 4px; 
+            display: inline-flex; 
+            gap: 23px; 
+            align-items: center; 
+            font-size: 12px; 
+            letter-spacing: .09em; 
+            text-transform: uppercase; 
+            transition: gap .25s ease; 
+        } 
+        
+        .text-link:hover { gap: 32px; } 
+        .arrow { font-size: 17px; line-height: 0; } 
+        
+        .section { padding: clamp(80px, 10vw, 130px) 0; } 
+        
+        .section-head { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 56px; 
+            gap: 25px; 
+        } 
+        
+        @media (min-width: 768px) {
+            .section-head {
+                flex-direction: row;
+                align-items: flex-end;
+            }
+        }
+
+        .section-head h2 { 
+            max-width: 640px; 
+            margin: 16px 0 0; 
+        } 
+        
+        /* Header */ 
+        header { 
+            height: 82px; 
+            position: absolute; 
+            z-index: 50; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            color: #fff; 
+            border-bottom: 1px solid rgba(255,255,255,.2); 
+            transition: background .3s ease, color .3s ease, height .3s ease, border-color .3s ease; 
+        } 
+        
+        header.scrolled, body.menu-open header { 
+            position: fixed; 
+            background: rgba(247,246,242,.96); 
+            color: var(--ink); 
+            height: 70px; 
+            border-bottom: 1px solid var(--line); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+        } 
+
+        body.menu-open header {
+            background: var(--paper);
+            border-bottom-color: transparent;
+        }
+        
+        .nav { 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+        } 
+        
+        .brand { 
+            font-size: 18px; 
+            font-weight: 500; 
+            letter-spacing: .13em; 
+            text-transform: uppercase; 
+            white-space: nowrap; 
+            z-index: 51;
+        } 
+        
+        .brand span { 
+            display: block; 
+            font-size: 7px; 
+            letter-spacing: .32em; 
+            text-align: center; 
+            margin-top: 2px; 
+            font-weight: 400; 
+            opacity: .8; 
+        } 
+        
+        .nav-links { 
+            display: none; 
+            gap: 31px; 
+            align-items: center; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: .1em; 
+        } 
+
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+        
+        .nav-links a { 
+            position: relative; 
+            opacity: .92; 
+        } 
+        
+        .nav-links a::after { 
+            content: ""; 
+            position: absolute; 
+            height: 1px; 
+            background: currentColor; 
+            bottom: -6px; 
+            left: 0; 
+            right: 100%; 
+            transition: right .25s; 
+        } 
+        
+        .nav-links a:hover::after { right: 0; } 
+        
+        .nav-cta { 
+            border: 1px solid rgba(255,255,255,.65); 
+            padding: 10px 15px; 
+            transition: background .25s, color .25s, border-color .25s; 
+        } 
+        
+        header.scrolled .nav-cta { border-color: var(--ink); } 
+        
+        .nav-cta:hover { 
+            background: #fff; 
+            color: var(--ink); 
+        } 
+        
+        header.scrolled .nav-cta:hover { 
+            background: var(--ink); 
+            color: #fff; 
+        } 
+        
+        .menu-btn { 
+            display: block; 
+            color: white; 
+            background: none; 
+            border: 0; 
+            padding: 8px 0; 
+            font-size: 11px; 
+            letter-spacing: .13em; 
+            text-transform: uppercase; 
+            z-index: 51;
+        } 
+        
+        header.scrolled .menu-btn, body.menu-open .menu-btn { 
+            color: var(--ink); 
+        }
+
+        @media (min-width: 768px) {
+            .menu-btn { display: none; }
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: var(--paper);
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        body.menu-open .mobile-menu {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            text-align: center;
+            font-family: var(--serif);
+            font-size: 32px;
+        }
+
+        /* Hero Image overlay logic */
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%);
+        }
+
+        /* Form Styling for Exact Alignment */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .input-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .16em;
+            color: var(--muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .custom-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--line);
+            padding: 8px 0;
+            font-family: var(--sans);
+            font-size: 15px;
+            color: var(--ink);
+            outline: none;
+            border-radius: 0;
+            transition: border-color 0.3s ease;
+            appearance: none; /* Removes default OS styling, critical for select */
+            -webkit-appearance: none;
+        }
+
+        .custom-input:focus {
+            border-bottom-color: var(--ink);
+        }
+
+        .custom-input::placeholder {
+            color: var(--muted);
+            opacity: 0.7;
+        }
+
+        /* Select specific styling to match text input alignment perfectly */
+        select.custom-input {
+            cursor: pointer;
+            padding-right: 24px; /* Space for custom arrow */
+        }
+
+        /* Style the placeholder option */
+        select.custom-input:invalid {
+            color: var(--muted);
+        }
+        
+        select.custom-input option {
+            color: var(--ink);
+            background-color: var(--paper);
+        }
+
+        /* Custom dropdown arrow for select */
+        .select-arrow {
+            position: absolute;
+            right: 0;
+            bottom: 12px;
+            pointer-events: none;
+            width: 10px;
+            height: 10px;
+            fill: var(--muted);
+        }
+
+        /* Form Grid - Aligning Select after Email */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px 60px;
+            }
+            .form-grid-full {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* Utilities */
+        .aspect-portrait { aspect-ratio: 4/5; }
+        .aspect-landscape { aspect-ratio: 16/9; }
+        
+        @media (min-width: 768px) {
+            .aspect-landscape { aspect-ratio: 3/2; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container nav">
+            <a href="#" class="brand">
+                Atelier Vale
+                <span>Studio</span>
+            </a>
+            
+            <nav class="nav-links">
+                <a href="#about">Studio</a>
+                <a href="#projects">Projects</a>
+                <a href="#services">Services</a>
+                <a href="#contact" class="nav-cta">Inquire</a>
+            </nav>
+
+            <button class="menu-btn" id="menu-toggle">Menu</button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <nav class="mobile-nav-links">
+            <a href="#about" class="mobile-link">Studio</a>
+            <a href="#projects" class="mobile-link">Projects</a>
+            <a href="#services" class="mobile-link">Services</a>
+            <a href="#contact" class="mobile-link text-muted text-lg mt-4 uppercase tracking-widest font-sans">Inquire</a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen min-h-[600px] flex items-center justify-center text-center">
+        <!-- Background Image -->
+        <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=2000" alt="Minimalist interior space" class="absolute inset-0 w-full h-full object-cover z-0" />
+        <div class="absolute inset-0 hero-overlay z-0"></div>
+        
+        <div class="container relative z-10 text-white mt-16">
+            <div class="eyebrow mx-auto justify-center mb-6 text-white/80 before:bg-white/80">Interior Architecture</div>
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-[86px] mb-8 leading-[1.05]">Calm, considered <br class="hidden md:block"/> spaces.</h1>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section container">
+        <div class="grid md:grid-cols-2 gap-12 lg:gap-24 items-center">
+            <div class="order-2 md:order-1">
+                <div class="eyebrow mb-6">The Studio</div>
+                <h2 class="mb-8">We design environments that feel timeless and deeply personal to those who inhabit them.</h2>
+                <p class="text-muted mb-10 max-w-md">Atelier Vale explores the delicate balance between aesthetic purity and functional warmth. Our approach is rooted in natural materials, subtle textures, and masterful manipulation of light.</p>
+                <a href="#" class="text-link">Our Philosophy <span class="arrow">→</span></a>
+            </div>
+            <div class="order-1 md:order-2">
+                <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1000" alt="Studio details" class="aspect-portrait object-cover w-full max-w-md ml-auto" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section id="projects" class="section bg-warm-white">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <div class="eyebrow mb-4">Selected Works</div>
+                    <h2>Recent Projects</h2>
+                </div>
+                <a href="#" class="text-link hidden md:inline-flex">View All Works <span class="arrow">→</span></a>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-x-8 gap-y-16 lg:gap-x-12 lg:gap-y-20">
+                <!-- Project 1 -->
+                <a href="#" class="group block">
+                    <div class="overflow-hidden mb-6 aspect-landscape">
+                        <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80&w=1200" alt="Oak Residence" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h3 class="font-serif text-2xl mb-1 group-hover:text-muted transition-colors">The Oak Residence</h3>
+                            <p class="text-xs uppercase tracking-widest text-muted">Residential</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 (Offset on desktop) -->
+                <a href="#" class="group block md:mt-24">
+                    <div class="overflow-hidden mb-6 aspect-portrait">
+                        <img src="https://images.unsplash.com/photo-1598928506311-c55dd580e5cb?auto=format&fit=crop&q=80&w=1000" alt="Coastal Retreat" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    </div>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h3 class="font-serif text-2xl mb-1 group-hover:text-muted transition-colors">Coastal Retreat</h3>
+                            <p class="text-xs uppercase tracking-widest text-muted">Hospitality</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="mt-12 md:hidden">
+                 <a href="#" class="text-link">View All Works <span class="arrow">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="section container max-w-4xl">
+        <div class="text-center mb-16 md:mb-24">
+            <div class="eyebrow justify-center mb-6">Inquiries</div>
+            <h2>Start a Project</h2>
+            <p class="text-muted mt-6 max-w-lg mx-auto">We are currently accepting new projects for 2024. Please fill out the form below to begin the conversation.</p>
+        </div>
+
+        <form action="#" method="POST">
+            <div class="form-grid">
+                
+                <!-- Name (Full width on mobile, half on desktop) -->
+                <div class="input-group">
+                    <label class="input-label" for="name">Full Name</label>
+                    <input type="text" id="name" class="custom-input" placeholder="Jane Doe" required />
+                </div>
+
+                <!-- Location -->
+                <div class="input-group">
+                    <label class="input-label" for="location">Project Location</label>
+                    <input type="text" id="location" class="custom-input" placeholder="City, State" />
+                </div>
+
+                <!-- Email (Half width) -->
+                <div class="input-group">
+                    <label class="input-label" for="email">Email Address</label>
+                    <input type="email" id="email" class="custom-input" placeholder="jane@example.com" required />
+                </div>
+
+                <!-- Select Option (Properly aligned AFTER email in grid flow) -->
+                <div class="input-group">
+                    <label class="input-label" for="inquiry-type">Inquiry Type</label>
+                    <!-- Select element with appearance-none and required to show placeholder styling properly -->
+                    <select id="inquiry-type" class="custom-input" required>
+                        <option value="" disabled selected hidden>Select an option...</option>
+                        <option value="residential">Residential Full Service</option>
+                        <option value="commercial">Commercial Space</option>
+                        <option value="consultation">Design Consultation</option>
+                        <option value="press">Press & Media</option>
+                    </select>
+                    <!-- Custom Arrow aligned perfectly -->
+                    <svg class="select-arrow" viewBox="0 0 24 24">
+                        <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                </div>
+
+                <!-- Message (Full width) -->
+                <div class="input-group form-grid-full">
+                    <label class="input-label" for="message">Project Details</label>
+                    <textarea id="message" rows="3" class="custom-input resize-none" placeholder="Tell us briefly about your scope, timeline, and vision..." required></textarea>
+                </div>
+
+            </div>
+
+            <div class="mt-12 text-center md:text-left">
+                <button type="submit" class="bg-ink text-paper px-10 py-4 text-[11px] uppercase tracking-[.13em] font-medium hover:bg-dark transition-colors w-full md:w-auto">
+                    Submit Inquiry
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-ink text-paper py-20 lg:py-32">
+        <div class="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+            
+            <div class="lg:col-span-2">
+                <div class="brand text-white mb-6">
+                    Atelier Vale
+                    <span>Studio</span>
+                </div>
+                <p class="text-white/60 max-w-xs text-sm">Creating calm, considered spaces for modern living globally.</p>
+            </div>
+
+            <div>
+                <h4 class="uppercase tracking-widest text-[10px] text-white/40 mb-6 font-semibold">Contact</h4>
+                <ul class="space-y-3 text-sm text-white/80">
+                    <li><a href="mailto:hello@ateliervale.com" class="hover:text-white transition-colors">hello@ateliervale.com</a></li>
+                    <li><p>+1 (555) 123-4567</p></li>
+                    <li class="pt-2 text-white/60">New York, NY<br>By Appointment Only</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="uppercase tracking-widest text-[10px] text-white/40 mb-6 font-semibold">Follow</h4>
+                <ul class="space-y-3 text-sm text-white/80">
+                    <li><a href="#" class="hover:text-white transition-colors">Instagram</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Pinterest</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Journal</a></li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="container mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40">
+            <p>&copy; 2024 Atelier Vale. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        const scrollThreshold = 50;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > scrollThreshold) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-toggle');
+        const body = document.body;
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            body.classList.toggle('menu-open');
+            if (body.classList.contains('menu-open')) {
+                menuBtn.textContent = 'Close';
+            } else {
+                menuBtn.textContent = 'Menu';
+            }
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                body.classList.remove('menu-open');
+                menuBtn.textContent = 'Menu';
+            });
+        });
+    </script>
+</body>
+</html>
+```
